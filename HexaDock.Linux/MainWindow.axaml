@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="HexaDock.Linux.MainWindow"
+        Title="HexaDock" Width="74" Height="74" MinWidth="74" MinHeight="74"
+        SystemDecorations="None" CanResize="False" Topmost="True" ShowInTaskbar="False"
+        Background="Transparent" TransparencyLevelHint="Transparent">
+  <Grid>
+    <Border x:Name="Panel" IsVisible="False" Margin="42,16,6,6" CornerRadius="18"
+            Background="#FA091116" BorderBrush="#00CDE2" BorderThickness="1" Padding="20,18,18,14">
+      <Grid RowDefinitions="Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Margin="0,0,0,15">
+          <StackPanel>
+            <TextBlock Text="H E X A D O C K" FontSize="21" FontWeight="SemiBold" Foreground="#EAFBFF" />
+            <TextBlock Text="A clean view of your Desktop" Foreground="#66838C" FontSize="11" Margin="1,3,0,0" />
+          </StackPanel>
+          <Button Grid.Column="1" Content="VAULT +" Click="VaultImport_Click" Margin="0,0,8,0" VerticalAlignment="Center" />
+          <Button Grid.Column="2" Content="SETTINGS" Click="Settings_Click" Margin="0,0,8,0" VerticalAlignment="Center" />
+          <Button Grid.Column="3" Content="CLOSE" Click="Collapse_Click" VerticalAlignment="Center" />
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="128,14,*">
+          <Border Grid.Column="0" Background="#101A20" BorderBrush="#1E3540" BorderThickness="1" CornerRadius="11" Padding="7">
+            <ListBox x:Name="CategoryList" SelectionChanged="Filter_Changed" Background="Transparent" BorderThickness="0" Foreground="#DDF8FC" />
+          </Border>
+
+          <Grid Grid.Column="2" RowDefinitions="Auto,*">
+            <Grid Grid.Row="0" ColumnDefinitions="*,145,Auto,Auto" Margin="0,0,0,11">
+              <TextBox x:Name="SearchBox" Watermark="Search Desktop…" TextChanged="Filter_Changed" Margin="0,0,8,0" />
+              <ComboBox x:Name="SortBox" Grid.Column="1" SelectionChanged="Sort_Changed" Margin="0,0,8,0" />
+              <Button x:Name="DirectionButton" Grid.Column="2" Content="A → Z" Click="Direction_Click" Margin="0,0,8,0" />
+              <Button Grid.Column="3" Content="↻" FontSize="17" Click="Refresh_Click" />
+            </Grid>
+
+            <DataGrid x:Name="ItemsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      Background="#091015" Foreground="#EAFBFF" BorderBrush="#203944" BorderThickness="1"
+                      GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#172932"
+                      HeadersVisibility="Column" SelectionMode="Single" DoubleTapped="ItemsGrid_DoubleTapped">
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Open" Click="Open_Click" />
+                  <MenuItem Header="Add or remove favorite" Click="Favorite_Click" />
+                  <MenuItem Header="Export encrypted copy" Click="VaultExport_Click" />
+                  <MenuItem Header="Remove encrypted copy" Click="VaultDelete_Click" />
+                  <MenuItem Header="Show in Files" Click="Reveal_Click" />
+                </ContextMenu>
+              </DataGrid.ContextMenu>
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="" Binding="{Binding IconGlyph}" Width="42" />
+                <DataGridTextColumn Header="NAME" Binding="{Binding Name}" Width="*" />
+                <DataGridTextColumn Header="TYPE" Binding="{Binding Type}" Width="105" />
+                <DataGridTextColumn Header="SOURCE" Binding="{Binding Source}" Width="110" />
+                <DataGridTextColumn Header="MODIFIED" Binding="{Binding Modified, StringFormat='{}{0:MMM d, yyyy  h:mm tt}'}" Width="180" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,11,0,0">
+          <TextBlock x:Name="StatusText" Foreground="#66838C" FontSize="10" />
+          <TextBlock Grid.Column="1" Text="Double-click to open  •  Right-click for actions" Foreground="#52717A" FontSize="10" />
+        </Grid>
+      </Grid>
+    </Border>
+
+    <Border Width="64" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3"
+            Background="#0B151A" BorderBrush="#00DDEA" BorderThickness="1" CornerRadius="18">
+      <Border.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Open HexaDock" Click="OpenMenu_Click" />
+          <MenuItem Header="Settings" Click="Settings_Click" />
+          <MenuItem Header="Refresh" Click="Refresh_Click" />
+          <MenuItem Header="Reset position" Click="ResetPosition_Click" />
+          <Separator />
+          <MenuItem Header="Exit HexaDock" Click="Exit_Click" />
+        </ContextMenu>
+      </Border.ContextMenu>
+      <Grid>
+        <Image Source="avares://HexaDock/Assets/UserLogo.png" Width="56" Height="56" Stretch="Uniform" />
+        <Thumb Background="Transparent" Cursor="SizeAll"
+               PointerPressed="Logo_PointerPressed" PointerReleased="Logo_PointerReleased"
+               DragStarted="Logo_DragStarted" DragDelta="Logo_DragDelta" DragCompleted="Logo_DragCompleted" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

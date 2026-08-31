@@ -1,0 +1,176 @@
+<Window x:Class="HexaDock.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HexaDock" Width="70" Height="70" WindowStyle="None"
+        AllowsTransparency="True" Background="Transparent" Topmost="True"
+        ShowInTaskbar="False" ResizeMode="NoResize">
+  <Grid>
+    <Border x:Name="Panel" Visibility="Collapsed" Margin="42,16,6,6" CornerRadius="18"
+            Background="#FA091116" BorderThickness="1" Padding="20,18,18,14">
+      <Border.BorderBrush>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+          <GradientStop Color="#00E9FF" Offset="0" />
+          <GradientStop Color="#5168FF" Offset="0.55" />
+          <GradientStop Color="#17343D" Offset="1" />
+        </LinearGradientBrush>
+      </Border.BorderBrush>
+      <Border.Effect>
+        <DropShadowEffect Color="#00DDF2" BlurRadius="22" ShadowDepth="0" Opacity="0.25" />
+      </Border.Effect>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <StackPanel>
+            <TextBlock Text="H E X A D O C K" FontSize="21" FontWeight="SemiBold" />
+          </StackPanel>
+          <Button Grid.Column="1" Content="VAULT +" Click="VaultImport_Click" Margin="0,0,8,0" VerticalAlignment="Center" />
+          <Button Grid.Column="2" Content="RECYCLE BIN" Click="RecycleBin_Click" Margin="0,0,8,0" VerticalAlignment="Center" ToolTip="Open Recycle Bin" />
+          <Button Grid.Column="3" Content="SETTINGS" Click="Settings_Click" Margin="0,0,8,0" VerticalAlignment="Center" />
+          <Button Grid.Column="4" Content="CLOSE" Click="Collapse_Click" VerticalAlignment="Center" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="14" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+
+          <Border Grid.Column="0" Background="#101A20" BorderBrush="#1E3540" BorderThickness="1" CornerRadius="11" Padding="7">
+            <ListBox x:Name="CategoryList" SelectionChanged="Filter_Changed" Background="Transparent" BorderThickness="0"
+                     Foreground="#DDF8FC" HorizontalContentAlignment="Stretch">
+              <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                  <Setter Property="Padding" Value="10,8" />
+                  <Setter Property="Margin" Value="0,1" />
+                  <Setter Property="Cursor" Value="Hand" />
+                  <Setter Property="Template">
+                    <Setter.Value>
+                      <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Item" Background="Transparent" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                          <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                          <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Item" Property="Background" Value="#172832" /></Trigger>
+                          <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Item" Property="Background" Value="#16404A" />
+                            <Setter Property="Foreground" Value="#00F0FF" />
+                          </Trigger>
+                        </ControlTemplate.Triggers>
+                      </ControlTemplate>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </ListBox.ItemContainerStyle>
+            </ListBox>
+          </Border>
+
+          <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0,0,0,11">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="135" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBox x:Name="SearchBox" Grid.Column="0" Margin="0,0,8,0" TextChanged="Filter_Changed"
+                       ToolTip="Search names, types, categories, and paths" />
+              <ComboBox x:Name="SortBox" Grid.Column="1" Margin="0,0,8,0" SelectionChanged="Sort_Changed"
+                        ToolTip="Sort results" />
+              <Button x:Name="DirectionButton" Grid.Column="2" Content="A → Z" Click="Direction_Click" Margin="0,0,8,0" />
+              <Button Grid.Column="3" Content="↻" FontSize="17" Click="Refresh_Click" ToolTip="Refresh" />
+            </Grid>
+
+            <DataGrid x:Name="ItemsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      Background="#091015" Foreground="#EAFBFF" BorderBrush="#203944" BorderThickness="1"
+                      RowBackground="#10191F" AlternatingRowBackground="#0D151A" GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#172932" HeadersVisibility="Column" SelectionMode="Single"
+                      MouseDoubleClick="ItemsGrid_DoubleClick" KeyDown="ItemsGrid_KeyDown">
+              <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="Background" Value="#16252C" /><Setter Property="Foreground" Value="#86DDE8" />
+                  <Setter Property="BorderBrush" Value="#203944" /><Setter Property="Padding" Value="9,8" />
+                  <Setter Property="FontWeight" Value="SemiBold" />
+                </Style>
+                <Style TargetType="DataGridCell">
+                  <Setter Property="BorderThickness" Value="0" /><Setter Property="Padding" Value="8,6" />
+                  <Setter Property="Foreground" Value="#EAFBFF" />
+                </Style>
+                <Style TargetType="DataGridRow">
+                  <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#172832" /></Trigger>
+                    <Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#16404A" /><Setter Property="Foreground" Value="#FFFFFF" /></Trigger>
+                  </Style.Triggers>
+                </Style>
+              </DataGrid.Resources>
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="Open" Click="Open_Click" />
+                  <MenuItem Header="Add or remove favorite" Click="Favorite_Click" />
+                  <MenuItem Header="Export encrypted copy" Click="VaultExport_Click" />
+                  <MenuItem Header="Remove encrypted copy" Click="VaultDelete_Click" />
+                  <MenuItem Header="Show in File Explorer" Click="Reveal_Click" />
+                </ContextMenu>
+              </DataGrid.ContextMenu>
+              <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="43">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate><Image Source="{Binding Icon}" Width="28" Height="28" Stretch="Uniform"
+                                         RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" /></DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="NAME" Binding="{Binding Name}" Width="*" />
+                <DataGridTextColumn Header="TYPE" Binding="{Binding Type}" Width="105" />
+                <DataGridTextColumn Header="SOURCE" Binding="{Binding Source}" Width="105" />
+                <DataGridTextColumn Header="MODIFIED" Binding="{Binding Modified, StringFormat={}{0:MMM d, yyyy  h:mm tt}}" Width="175" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,11,0,0">
+          <TextBlock x:Name="StatusText" Foreground="{StaticResource Muted}" FontSize="10" />
+          <TextBlock Text="Double-click to open  •  Right-click for location" HorizontalAlignment="Right" Foreground="#52717A" FontSize="10" />
+        </Grid>
+      </Grid>
+    </Border>
+
+    <Grid Width="64" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3">
+      <Image x:Name="LogoImage" Source="/Assets/UserLogo.png" Width="58" Height="58" Stretch="Uniform">
+        <Image.Effect>
+          <DropShadowEffect x:Name="LogoGlow" Color="#00E9FF" BlurRadius="8" ShadowDepth="0" Opacity="0.95" />
+        </Image.Effect>
+      </Image>
+      <Thumb x:Name="HexThumb" Background="Transparent" Cursor="SizeAll"
+             DragStarted="Hex_DragStarted" DragDelta="Hex_DragDelta" DragCompleted="Hex_DragCompleted">
+        <Thumb.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="Open HexaDock" Click="OpenMenu_Click" />
+            <MenuItem Header="Settings" Click="Settings_Click" />
+            <MenuItem Header="Refresh" Click="Refresh_Click" />
+            <MenuItem Header="Reset position" Click="ResetPosition_Click" />
+            <Separator />
+            <MenuItem Header="Exit HexaDock" Click="Exit_Click" />
+          </ContextMenu>
+        </Thumb.ContextMenu>
+        <Thumb.Template><ControlTemplate TargetType="Thumb"><Border Background="Transparent" /></ControlTemplate></Thumb.Template>
+      </Thumb>
+    </Grid>
+  </Grid>
+</Window>

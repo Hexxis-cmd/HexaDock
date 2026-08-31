@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.hexxis_cmd.HexaDock</id>
+  <name>HexaDock</name>
+  <summary>A clean, searchable Linux Desktop dock</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>HexaDock keeps files where they already are while providing fast local search, categories, favorites, recent items, and an optional encrypted local vault.</p>
+  </description>
+  <launchable type="desktop-id">hexadock.desktop</launchable>
+  <url type="homepage">https://github.com/Hexxis-cmd/HexaDock</url>
+  <provides><binary>HexaDock</binary></provides>
+  <releases><release version="1.0.0" date="2026-09-01" /></releases>
+</component>

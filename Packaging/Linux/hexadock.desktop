@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=HexaDock
+Comment=A clean, searchable Linux Desktop dock
+Exec=HexaDock
+Icon=hexadock
+Terminal=false
+Categories=Utility;FileManager;FileTools;
